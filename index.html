@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DJ Cyber Turntable - Assignment 3</title>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+        }
+        .container {
+            background: #1e293b;
+            padding: 2rem;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            text-align: center;
+            width: 350px;
+        }
+        .turntable {
+            width: 150px;
+            height: 150px;
+            background: #000;
+            border-radius: 50%;
+            margin: 0 auto 1.5rem auto;
+            position: relative;
+            border: 8px solid #334155;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .turntable::after {
+            content: '';
+            width: 40px;
+            height: 40px;
+            background: #cbd5e1;
+            border-radius: 50%;
+            border: 3px dashed #64748b;
+        }
+        .spinning {
+            animation: spin 3s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .control-group {
+            margin-bottom: 1.2rem;
+            text-align: left;
+        }
+        label {
+            display: block;
+            font-size: 0.9rem;
+            margin-bottom: 0.4rem;
+            color: #94a3b8;
+        }
+        input[type="range"] {
+            width: 100%;
+            accent-color: #38bdf8;
+            cursor: pointer;
+        }
+        .btn-start {
+            background-color: #0284c7;
+            color: white;
+            border: none;
+            padding: 0.6rem 1.2rem;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 0.5rem;
+        }
+        .btn-start:hover {
+            background-color: #0369a1;
+        }
+        .status {
+            font-size: 0.85rem;
+            color: #38bdf8;
+            margin-top: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h2>DJ 赛博调音台</h2>
+        <p style="font-size: 0.85rem; color: #94a3b8;">Assignment 3 互动体验程序</p>
+
+        <div class="turntable" id="vinyl"></div>
+
+        <button class="btn-start" id="startBtn">🎵 开启音乐空间</button>
+
+        <div class="control-group" style="margin-top: 1.5rem;">
+            <label for="speedSlider">节奏/速度 (Tempo): <span id="speedVal">1.0</span>x</label>
+            <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0" disabled>
+        </div>
+
+        <div class="control-group">
+            <label for="pitchSlider">音高/风格 (Pitch Shift): <span id="pitchVal">440</span> Hz</label>
+            <input type="range" id="pitchSlider" min="220" max="880" step="10" value="440" disabled>
+        </div>
+
+        <div class="status" id="statusText">状态：等待开启音频...</div>
+    </div>
+
+    <script>
+        let audioCtx = null;
+        let isPlaying = false;
+        let timer = null;
+        
+        const startBtn = document.getElementById('startBtn');
+        const vinyl = document.getElementById('vinyl');
+        const speedSlider = document.getElementById('speedSlider');
+        const pitchSlider = document.getElementById('pitchSlider');
+        const speedVal = document.getElementById('speedVal');
+        const pitchVal = document.getElementById('pitchVal');
+        const statusText = document.getElementById('statusText');
+
+        const melody = [261.63, 293.66, 329.63, 392.00, 440.00, 392.00, 329.63, 293.66];
+        let noteIndex = 0;
+        let currentSpeed = 1.0;
+        let currentPitch = 440;
+
+        function playTone(freq) {
+            if (!audioCtx) return;
+            const osc = audioCtx.createOscillator();
+            const gain = audioCtx.createGain();
+
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+
+            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
+            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+
+            osc.connect(gain);
+            gain.connect(audioCtx.destination);
+
+            osc.start();
+            osc.stop(audioCtx.currentTime + 0.6);
+        }
+
+        function startMusicLoop() {
+            if (timer) clearInterval(timer);
+            let interval = 500 / currentSpeed;
+
+            timer = setInterval(() => {
+                if (!isPlaying) return;
+                let baseFreq = melody[noteIndex];
+                let adjustedFreq = baseFreq * (currentPitch / 440);
+                
+                playTone(adjustedFreq);
+                
+                noteIndex = (noteIndex + 1) % melody.length;
+            }, interval);
+        }
+
+        startBtn.addEventListener('click', () => {
+            if (!audioCtx) {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            }
+            if (audioCtx.state === 'suspended') {
+                audioCtx.resume();
+            }
+
+            isPlaying = true;
+            vinyl.classList.add('spinning');
+            speedSlider.disabled = false;
+            pitchSlider.disabled = false;
+            startBtn.style.display = 'none';
+            statusText.innerText = "状态：播放中，试着拖动滑块改变风格！";
+
+            startMusicLoop();
+        });
+
+        speedSlider.addEventListener('input', (e) => {
+            currentSpeed = parseFloat(e.target.value);
+            speedVal.innerText = currentSpeed;
+            vinyl.style.animationDuration = (3 / currentSpeed) + 's';
+            if (isPlaying) startMusicLoop();
+        });
+
+        pitchSlider.addEventListener('input', (e) => {
+            currentPitch = parseInt(e.target.value);
+            pitchVal.innerText = currentPitch;
+        });
+    </script>
+</body>
+</html>
