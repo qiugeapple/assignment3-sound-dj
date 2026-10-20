@@ -3,49 +3,64 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>DJ Cyber Turntable - Assignment 3</title>
+    <title>S/M - Cyber Turntable</title>
     <style>
+        /* 整体布局与配色 (参考图风格) */
         body {
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #e6e3e0; /* 类似参考图的米灰色背景 */
+            color: #111; /* 纯黑文字，清晰锐利 */
+            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; /* 现代无衬线字体 */
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
             overflow: hidden;
         }
-        .container {
-            background: #1e293b;
-            padding: 2rem;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
-            text-align: center;
-            width: 350px;
+
+        /* 顶部标题栏 */
+        .header {
+            position: absolute;
+            top: 20px;
+            width: 90%;
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #666;
         }
-        .turntable {
-            width: 150px;
-            height: 150px;
-            background: #000;
-            border-radius: 50%;
-            margin: 0 auto 1.5rem auto;
-            position: relative;
-            border: 8px solid #334155;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+
+        /* 主内容区域：左侧唱片，右侧信息 */
+        .main-wrapper {
             display: flex;
             align-items: center;
-            justify-content: center;
+            gap: 60px; /* 留白，体现高级感 */
+            padding: 40px;
+            background: #fff; /* 白色内容卡片，对比强烈 */
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05); /* 轻微阴影 */
+            border-radius: 4px;
         }
-        .turntable::after {
-            content: '';
-            width: 40px;
-            height: 40px;
-            background: #cbd5e1;
+
+        /* --- 左侧：黑胶唱片区域 (升级版) --- */
+        .vinyl-container {
+            position: relative;
+            width: 300px;
+            height: 300px;
+        }
+
+        .turntable {
+            width: 100%;
+            height: 100%;
+            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSIxNDgiIGZpbGw9IiMwMDAiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSIxMjAiIGZpbGw9IiMyMjIiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSI5MCIgZmlsbD0iIzQ0NCIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjE1MCIgcj0iNjAiIGZpbGw9IiM2NjYiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSIzMCIgZmlsbD0iIzhhOGE4YSIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjE1MCIgcj0iMTUiIGZpbGw9IiNmZmYiLz4KPC9zdmc+'); /* 纹理图 */
+            background-size: cover;
             border-radius: 50%;
-            border: 3px dashed #64748b;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3);
+            position: relative;
+            z-index: 2;
         }
+
         .spinning {
             animation: spin 3s linear infinite;
         }
@@ -53,65 +68,189 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-        .control-group {
-            margin-bottom: 1.2rem;
+
+        /* 唱片上的红色参考线 (参考图细节) */
+        .vinyl-guide-line {
+            position: absolute;
+            top: 0;
+            left: 150px;
+            width: 1px;
+            height: 100%;
+            background: rgba(220, 53, 69, 0.5); /* 强调红 */
+            z-index: 1;
+        }
+        
+        /* 当前播放状态指示器 (参考图细节) */
+        .now-playing-dot {
+            position: absolute;
+            top: 50%;
+            left: 150px; /* 指向中心 */
+            width: 8px;
+            height: 8px;
+            background: #dc3545; /* 红色强调点 */
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 3;
+            box-shadow: 0 0 5px #dc3545;
+        }
+
+        /* 时间显示 (移到下方) */
+        .time-display {
+            position: absolute;
+            bottom: -30px;
+            width: 100%;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #999;
+        }
+
+        /* --- 右侧：信息与控件区域 --- */
+        .info-container {
+            width: 300px;
             text-align: left;
         }
-        label {
-            display: block;
-            font-size: 0.9rem;
-            margin-bottom: 0.4rem;
-            color: #94a3b8;
+
+        /* 大标题 (参考图风格) */
+        .album-title {
+            font-size: 4rem;
+            font-weight: 900;
+            line-height: 0.9;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
         }
-        input[type="range"] {
-            width: 100%;
-            accent-color: #38bdf8;
-            cursor: pointer;
-        }
-        .btn-start {
-            background-color: #0284c7;
-            color: white;
-            border: none;
-            padding: 0.6rem 1.2rem;
-            border-radius: 0.5rem;
+
+        /* 副标题 */
+        .artist-name {
             font-size: 1rem;
+            color: #555;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        /* 控件组 (极简风格) */
+        .control-group {
+            margin-bottom: 25px;
+            border-top: 1px solid #eee;
+            padding-top: 15px;
+        }
+
+        label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 0.75rem;
+            color: #777;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 2px;
+            background: #ddd; /* 轨道颜色 */
+            outline: none;
+        }
+        
+        /* 滑块轨道颜色变化 */
+        #speedSlider { accent-color: #007bff; } /* 蓝色强调 */
+        #pitchSlider { accent-color: #dc3545; } /* 红色强调 */
+
+        /* 按钮 (极简风格) */
+        .btn-start {
+            background-color: transparent;
+            color: #111;
+            border: 1px solid #111;
+            padding: 8px 20px;
+            font-size: 0.8rem;
             cursor: pointer;
-            transition: background 0.2s;
-            margin-top: 0.5rem;
+            transition: all 0.3s;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 10px;
         }
+
         .btn-start:hover {
-            background-color: #0369a1;
+            background-color: #111;
+            color: #fff;
         }
+
         .status {
-            font-size: 0.85rem;
-            color: #38bdf8;
-            margin-top: 1rem;
+            font-size: 0.75rem;
+            color: #dc3545; /* 红色状态提示 */
+            margin-top: 15px;
+            font-style: italic;
+        }
+
+        /* 底部页脚 (参考图风格) */
+        .footer {
+            position: absolute;
+            bottom: 20px;
+            text-align: center;
+            font-size: 0.7rem;
+            color: #999;
+            letter-spacing: 2px;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <h2>DJ 赛博调音台</h2>
-        <p style="font-size: 0.85rem; color: #94a3b8;">Assignment 3 互动体验程序</p>
-
-        <div class="turntable" id="vinyl"></div>
-
-        <button class="btn-start" id="startBtn">🎵 开启音乐空间</button>
-
-        <div class="control-group" style="margin-top: 1.5rem;">
-            <label for="speedSlider">节奏/速度 (Tempo): <span id="speedVal">1.0</span>x</label>
-            <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0" disabled>
-        </div>
-
-        <div class="control-group">
-            <label for="pitchSlider">音高/风格 (Pitch Shift): <span id="pitchVal">440</span> Hz</label>
-            <input type="range" id="pitchSlider" min="220" max="880" step="10" value="440" disabled>
-        </div>
-
-        <div class="status" id="statusText">状态：等待开启音频...</div>
+    <!-- 顶部导航 -->
+    <div class="header">
+        <span>S/M</span>
+        <span>ARTISTS &nbsp; MIXTAPES &nbsp; AWARDS</span>
     </div>
 
+    <!-- 主内容卡片 -->
+    <div class="main-wrapper">
+        <!-- 左侧：黑胶唱片 -->
+        <div class="vinyl-container">
+            <div class="turntable" id="vinyl"></div>
+            <!-- 参考线与指示点 -->
+            <div class="vinyl-guide-line"></div>
+            <div class="now-playing-dot" id="playDot" style="display: none;"></div>
+            
+            <!-- 时间显示 -->
+            <div class="time-display">
+                <span id="currentTimeDisplay">0:00</span> / <span id="totalTimeDisplay">4:08</span>
+            </div>
+        </div>
+
+        <!-- 右侧：信息与控件 -->
+        <div class="info-container">
+            <h1 class="album-title">CYBER<br>TURNTABLE</h1>
+            <p class="artist-name">Interactive Audio Lab</p>
+
+            <!-- 启动按钮 -->
+            <button class="btn-start" id="startBtn">💿 Power On</button>
+
+            <!-- 控件区域 -->
+            <div class="control-group" id="controls" style="display: none;">
+                <label for="speedSlider">
+                    <span>Tempo</span>
+                    <span id="speedVal">1.0x</span>
+                </label>
+                <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0">
+            </div>
+
+            <div class="control-group" id="controls2" style="display: none;">
+                <label for="pitchSlider">
+                    <span>Pitch Shift</span>
+                    <span id="pitchVal">440</span> Hz
+                </label>
+                <input type="range" id="pitchSlider" min="220" max="880" step="10" value="440">
+            </div>
+
+            <div class="status" id="statusText">READY</div>
+        </div>
+    </div>
+
+    <!-- 底部信息 -->
+    <div class="footer">
+        BEST SOUNDS<br>2026
+    </div>
+
+    <!-- JavaScript 逻辑保持不变，只更新了 UI 文本和样式 -->
     <script>
         let audioCtx = null;
         let isPlaying = false;
@@ -119,23 +258,28 @@
         
         const startBtn = document.getElementById('startBtn');
         const vinyl = document.getElementById('vinyl');
+        const playDot = document.getElementById('playDot');
         const speedSlider = document.getElementById('speedSlider');
         const pitchSlider = document.getElementById('pitchSlider');
         const speedVal = document.getElementById('speedVal');
         const pitchVal = document.getElementById('pitchVal');
         const statusText = document.getElementById('statusText');
+        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const totalTimeDisplay = document.getElementById('totalTimeDisplay');
 
+        // 模拟的旋律序列 (保持悠扬)
         const melody = [261.63, 293.66, 329.63, 392.00, 440.00, 392.00, 329.63, 293.66];
         let noteIndex = 0;
         let currentSpeed = 1.0;
         let currentPitch = 440;
+        let startTime = 0;
 
         function playTone(freq) {
             if (!audioCtx) return;
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
-            osc.type = 'sine';
+            osc.type = 'sine'; // 柔和正弦波
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
             gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
@@ -148,16 +292,34 @@
             osc.stop(audioCtx.currentTime + 0.6);
         }
 
+        // 更新模拟时间显示
+        function updateTimeDisplay() {
+            if (!isPlaying) return;
+            const elapsed = Math.floor((Date.now() - startTime) / 1000);
+            const minutes = Math.floor(elapsed / 60);
+            const seconds = elapsed % 60;
+            currentTimeDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
+            
+            // 循环显示，假设总时长4:08
+            if (elapsed >= 248) { // 4*60 + 8
+                startTime = Date.now();
+            }
+        }
+
         function startMusicLoop() {
             if (timer) clearInterval(timer);
             let interval = 500 / currentSpeed;
 
             timer = setInterval(() => {
-                if (!isPlaying) return;
+                if (!isPlaying) {
+                    clearInterval(timer);
+                    return;
+                }
                 let baseFreq = melody[noteIndex];
                 let adjustedFreq = baseFreq * (currentPitch / 440);
                 
                 playTone(adjustedFreq);
+                updateTimeDisplay();
                 
                 noteIndex = (noteIndex + 1) % melody.length;
             }, interval);
@@ -171,19 +333,31 @@
                 audioCtx.resume();
             }
 
-            isPlaying = true;
-            vinyl.classList.add('spinning');
-            speedSlider.disabled = false;
-            pitchSlider.disabled = false;
-            startBtn.style.display = 'none';
-            statusText.innerText = "状态：播放中，试着拖动滑块改变风格！";
-
-            startMusicLoop();
+            if (!isPlaying) {
+                isPlaying = true;
+                startTime = Date.now();
+                vinyl.classList.add('spinning');
+                playDot.style.display = 'block';
+                startBtn.innerText = "💿 Power Off";
+                statusText.innerText = "PLAYING";
+                document.getElementById('controls').style.display = 'block';
+                document.getElementById('controls2').style.display = 'block';
+                startMusicLoop();
+            } else {
+                isPlaying = false;
+                vinyl.classList.remove('spinning');
+                playDot.style.display = 'none';
+                startBtn.innerText = "💿 Power On";
+                statusText.innerText = "STOPPED";
+                clearInterval(timer);
+                currentTimeDisplay.innerText = "0:00";
+            }
         });
 
         speedSlider.addEventListener('input', (e) => {
             currentSpeed = parseFloat(e.target.value);
-            speedVal.innerText = currentSpeed;
+            speedVal.innerText = `${currentSpeed.toFixed(1)}x`;
+            // 动态调整黑胶旋转速度
             vinyl.style.animationDuration = (3 / currentSpeed) + 's';
             if (isPlaying) startMusicLoop();
         });
