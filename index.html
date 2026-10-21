@@ -9,7 +9,7 @@
             box-sizing: border-box;
         }
         body {
-            background-color: #e6e3e0; /* 经典高级米灰色背景 */
+            background-color: #e6e3e0;
             color: #111;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             display: flex;
@@ -20,8 +20,6 @@
             margin: 0;
             overflow: hidden;
         }
-
-        /* 顶部导航 */
         .header {
             position: absolute;
             top: 30px;
@@ -34,8 +32,6 @@
             text-transform: uppercase;
             color: #777;
         }
-
-        /* 主内容卡片：采用更宽敞的网格布局 */
         .main-wrapper {
             display: grid;
             grid-template-columns: 320px 380px;
@@ -47,30 +43,25 @@
             border-radius: 8px;
             max-width: 900px;
         }
-
-        /* 左侧：黑胶唱片区域（完美内嵌，不再溢出） */
         .vinyl-section {
             display: flex;
             flex-direction: column;
             align-items: center;
             position: relative;
         }
-
         .vinyl-container {
             position: relative;
             width: 280px;
             height: 280px;
         }
-
         .turntable {
             width: 100%;
             height: 100%;
-            background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIzMDAiIGhlaWdodD0iMzAwIiB2aWV3Qm94PSIwIDAgMzAwIDMwMCI+CiAgPGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSIxNDgiIGZpbGw9IiMwMDAiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSIxMjAiIGZpbGw9IiMyMjIiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSI5MCIgZmlsbD0iIzQ0NCIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjE1MCIgcj0iNjAiIGZpbGw9IiM2NjYiLz4KICA8Y2lyY2xlIGNjeD0iMTUwIiBjeT0iMTUwIiByPSIzMCIgZmlsbD0iIzhhOGE4YSIvPgogIDxjaXJjbGUgY3g9IjE1MCIgY3k9IjE1MCIgcj0iMTUiIGZpbGw9IiNmZmYiLz4KPC9zdmc+');
-            background-size: cover;
             border-radius: 50%;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Ccircle cx='140' cy='140' r='138' fill='%23000' stroke='white' stroke-width='2'/%3E%3Ccircle cx='140' cy='140' r='60' fill='%23666'/%3E%3Ccircle cx='140' cy='140' r='22' fill='white'/%3E%3Cline x1='140' y1='0' x2='140' y2='280' stroke='%23dc3545' stroke-width='1.5'/%3E%3C/svg%3E");
+            background-size: cover;
         }
-
         .spinning {
             animation: spin 3s linear infinite;
         }
@@ -78,44 +69,39 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
-
-        /* 唱片上的红色参考线与指示点 */
         .vinyl-guide-line {
             position: absolute;
             top: 0;
-            left: 140px;
+            left: 50%;
             width: 1px;
             height: 100%;
-            background: rgba(220, 53, 69, 0.4);
+            background: rgba(220, 53, 69, 0.8);
             pointer-events: none;
+            z-index: 5;
         }
-        
         .now-playing-dot {
             position: absolute;
-            top: 50%;
-            left: 140px;
+            bottom: 42px;
+            left: 50%;
             width: 8px;
             height: 8px;
             background: #dc3545;
             border-radius: 50%;
-            transform: translate(-50%, -50%);
+            transform: translate(-50%, 0);
             box-shadow: 0 0 6px #dc3545;
             display: none;
+            z-index: 6;
         }
-
         .time-display {
             margin-top: 20px;
             font-size: 0.75rem;
             color: #888;
             letter-spacing: 1px;
         }
-
-        /* 右侧：信息与交互控件 */
         .info-section {
             display: flex;
             flex-direction: column;
         }
-
         .album-title {
             font-size: 3rem;
             font-weight: 900;
@@ -124,16 +110,13 @@
             margin: 0 0 8px 0;
             color: #111;
         }
-
         .artist-name {
             font-size: 0.85rem;
             color: #666;
-            margin-bottom: 30px;
+            margin-bottom: 24px;
             text-transform: uppercase;
             letter-spacing: 1.5px;
         }
-
-        /* 极简按钮 */
         .btn-start {
             background-color: #111;
             color: #fff;
@@ -146,19 +129,26 @@
             transition: background 0.2s, transform 0.1s;
             text-transform: uppercase;
             width: fit-content;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             border-radius: 2px;
         }
-
         .btn-start:hover {
             background-color: #333;
         }
-
-        .btn-start:active {
-            transform: scale(0.98);
+        .instrument-select {
+            width: 100%;
+            padding: 10px 12px;
+            font-size: 0.75rem;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: #333;
+            background: #fafafa;
+            border: 1px solid #eee;
+            border-radius: 2px;
+            margin-bottom: 20px;
+            outline: none;
+            cursor: pointer;
         }
-
-        /* 控制面板区域 */
         .controls-wrapper {
             border-top: 1px solid #eee;
             padding-top: 20px;
@@ -166,13 +156,11 @@
             flex-direction: column;
             gap: 20px;
         }
-
         .control-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-
         label {
             display: flex;
             justify-content: space-between;
@@ -181,7 +169,6 @@
             text-transform: uppercase;
             letter-spacing: 1px;
         }
-
         input[type="range"] {
             -webkit-appearance: none;
             width: 100%;
@@ -190,10 +177,8 @@
             outline: none;
             border-radius: 2px;
         }
-        
         #speedSlider { accent-color: #007bff; }
         #pitchSlider { accent-color: #dc3545; }
-
         .status {
             font-size: 0.7rem;
             color: #dc3545;
@@ -202,8 +187,6 @@
             letter-spacing: 1px;
             text-transform: uppercase;
         }
-
-        /* 底部版权说明 */
         .footer {
             position: absolute;
             bottom: 30px;
@@ -216,14 +199,12 @@
     </style>
 </head>
 <body>
-
     <div class="header">
         <span>S/M</span>
         <span>ARTISTS &nbsp;/&nbsp; MIXTAPES &nbsp;/&nbsp; AWARDS</span>
     </div>
 
     <div class="main-wrapper">
-        <!-- 左侧黑胶区块 -->
         <div class="vinyl-section">
             <div class="vinyl-container">
                 <div class="turntable" id="vinyl"></div>
@@ -235,12 +216,20 @@
             </div>
         </div>
 
-        <!-- 右侧信息与交互区块 -->
         <div class="info-section">
             <h1 class="album-title">CYBER<br>TURNTABLE</h1>
             <p class="artist-name">Interactive Audio Lab</p>
 
             <button class="btn-start" id="startBtn">💿 Power On</button>
+
+            <select class="instrument-select" id="instrumentSelect">
+                <option value="sine">Pure Sine 纯音</option>
+                <option value="square">8-Bit Square 方波</option>
+                <option value="sawtooth">Analog Saw 锯齿波</option>
+                <option value="triangle">Soft Triangle 三角波</option>
+                <option value="subbass">Sub Bass 低音贝斯</option>
+                <option value="musicbox">Music Box 八音盒</option>
+            </select>
 
             <div class="controls-wrapper" id="controlsArea" style="opacity: 0.4; pointer-events: none; transition: opacity 0.3s;">
                 <div class="control-group">
@@ -250,7 +239,6 @@
                     </label>
                     <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0">
                 </div>
-
                 <div class="control-group">
                     <label for="pitchSlider">
                         <span>Pitch Shift</span>
@@ -272,10 +260,11 @@
         let audioCtx = null;
         let isPlaying = false;
         let timer = null;
-        
+
         const startBtn = document.getElementById('startBtn');
         const vinyl = document.getElementById('vinyl');
         const playDot = document.getElementById('playDot');
+        const instrumentSelect = document.getElementById('instrumentSelect');
         const speedSlider = document.getElementById('speedSlider');
         const pitchSlider = document.getElementById('pitchSlider');
         const speedVal = document.getElementById('speedVal');
@@ -285,27 +274,57 @@
         const currentTimeDisplay = document.getElementById('currentTimeDisplay');
 
         const melody = [261.63, 293.66, 329.63, 392.00, 440.00, 392.00, 329.63, 293.66];
+
         let noteIndex = 0;
         let currentSpeed = 1.0;
         let currentPitch = 440;
         let startTime = 0;
 
-        function playTone(freq) {
+        function playTone(freq, instrument) {
             if (!audioCtx) return;
+
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
 
-            osc.type = 'sine';
+            switch (instrument) {
+                case 'square':
+                    osc.type = 'square';
+                    break;
+                case 'sawtooth':
+                    osc.type = 'sawtooth';
+                    break;
+                case 'triangle':
+                    osc.type = 'triangle';
+                    break;
+                case 'subbass':
+                    osc.type = 'sine';
+                    freq = freq * 0.5;
+                    break;
+                case 'musicbox':
+                    osc.type = 'triangle';
+                    break;
+                default:
+                    osc.type = 'sine';
+            }
+
             osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
 
-            gain.gain.setValueAtTime(0.15, audioCtx.currentTime);
-            gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.6);
+            const now = audioCtx.currentTime;
+            gain.gain.setValueAtTime(0.0001, now);
+            gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
+
+            if (instrument === 'musicbox') {
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
+            } else if (instrument === 'subbass') {
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
+            } else {
+                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+            }
 
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-
-            osc.start();
-            osc.stop(audioCtx.currentTime + 0.6);
+            osc.start(now);
+            osc.stop(now + 0.9);
         }
 
         function updateTimeDisplay() {
@@ -314,26 +333,24 @@
             const minutes = Math.floor(elapsed / 60);
             const seconds = elapsed % 60;
             currentTimeDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-            if (elapsed >= 248) {
-                startTime = Date.now();
-            }
         }
 
         function startMusicLoop() {
             if (timer) clearInterval(timer);
-            let interval = 500 / currentSpeed;
 
+            let interval = 500 / currentSpeed;
             timer = setInterval(() => {
                 if (!isPlaying) {
                     clearInterval(timer);
                     return;
                 }
+
                 let baseFreq = melody[noteIndex];
                 let adjustedFreq = baseFreq * (currentPitch / 440);
-                
-                playTone(adjustedFreq);
+
+                playTone(adjustedFreq, instrumentSelect.value);
                 updateTimeDisplay();
-                
+
                 noteIndex = (noteIndex + 1) % melody.length;
             }, interval);
         }
@@ -342,6 +359,7 @@
             if (!audioCtx) {
                 audioCtx = new (window.AudioContext || window.webkitAudioContext)();
             }
+
             if (audioCtx.state === 'suspended') {
                 audioCtx.resume();
             }
@@ -373,7 +391,11 @@
             currentSpeed = parseFloat(e.target.value);
             speedVal.innerText = `${currentSpeed.toFixed(1)}x`;
             vinyl.style.animationDuration = (3 / currentSpeed) + 's';
-            if (isPlaying) startMusicLoop();
+
+            if (isPlaying) {
+                clearInterval(timer);
+                startMusicLoop();
+            }
         });
 
         pitchSlider.addEventListener('input', (e) => {
