@@ -67,9 +67,6 @@ Alternatively, open `index.html` directly in a current desktop browser. A local 
 
 The code uses browser-native **Canvas 2D**, **Web Audio API** and **OfflineAudioContext**. The cup uses projected three-dimensional coordinates and depth-sorted ingredients rather than an imported model or external 3D library.
 
-### Optional: GitHub Pages
-
-Place the source files at the repository root. In **Settings → Pages**, choose **Deploy from a branch**, select the actual source branch and `/ (root)`, then save. After deployment, add the URL GitHub provides to this README. Relative asset paths support repository-based Pages URLs.
 
 ## Mistakes and interruptions
 

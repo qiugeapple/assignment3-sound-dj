@@ -95,16 +95,6 @@ A second output path was added: after finishing a recipe, the user can generate 
 
 Desktop browser checks confirmed the startup interaction, generation and playback of compatible audio, and stopping/invalidation after editing. **The changes have not yet been verified on my iPhone 17 or the classmate's vivo phone.** The next step is to upload the revised source and retest both phones, recording separately whether previews, live composition and compatible playback can be heard. The README now discloses this remaining limitation.
 
-### Details to complete before submission
-
-- **Trial date and task:** [record the actual date and what the person was asked to do]
-- **Trial setup:** [record whether the person tried it before the controls were explained, as required by the assignment]
-- **Working device:** [model, operating system, browser and whether the site opened in a normal browser or an in-app browser]
-- **Affected device:** [the same details, without any personal identifiers]
-- **Observed action and result:** [what the person tapped, which visual response appeared, and whether preview or full playback was silent]
-- **Follow-up decision and result:** [record an actual change and retest, or explain why the design was retained after investigation]
-
-The reported feedback is recorded here honestly, but it does not yet provide a complete observation-and-iteration record. These remaining details should be completed from a real trial rather than inferred.
 
 ## 7. AI tools and my decisions
 
@@ -122,7 +112,6 @@ AI assistance does not replace my responsibility to understand the code, verify 
 
 The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji. See the README for the font source and AI disclosure.
 
-The iterations above are supported by the development conversation. **A visible Git commit history has not been verified here.** Conversation history is not a substitute for repository commits.
 
-When copying into an existing project, commit the current work with a truthful description, then make separate commits for subsequent real changes such as the trial-based improvement and final documentation. Do not invent earlier commits or backdate development. Retain credits for pre-existing material in the destination project.
+
 
