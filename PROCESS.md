@@ -115,5 +115,3 @@ AI assistance does not replace my responsibility to understand the code, verify 
 The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji. See the README for the font source and AI disclosure.
 
 The iterations above are supported by the development conversation. **A visible Git commit history has not been verified here.** Conversation history is not a substitute for repository commits.
-
-When copying into an existing project, commit the current work with a truthful description, then make separate commits for subsequent real changes such as the trial-based improvement and final documentation. Do not invent earlier commits or backdate development. Retain credits for pre-existing material in the destination project.
