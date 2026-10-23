@@ -1,53 +1,110 @@
-# 2. PROCESS.md
+# Process — Boba Melody
 
-```markdown
-# Project Process & Evolution: Cyber Turntable
+**Assignment 3: An interactive experience**
 
-## 1. Starting Idea
-The initial concept began as a backend Python script using Streamlit and pre-rendered `.wav` buffers to generate mood-based ambient sounds. However, while testing the Python environment, dependency management (`uv` PEP 668 restrictions) and the asynchronous nature of button-triggered rendering introduced noticeable latency between action and acoustic feedback.
+This document records decisions visible in the development conversation. Author feedback and implementation checks are separated from the required independent user trial. The trial section remains incomplete until another person has actually tried the experience.
 
-I pivoted to a browser-native web platform utilizing the **Web Audio API** and **HTML5/CSS3**. This provided:
-- Zero installation friction (no environment or dependency issues for evaluators).
-- Zero latency between slider dragging and audio parameter modulation.
-- A physical metaphor: pairing digital synthesis with a visual spinning vinyl record.
+## 1. Starting idea and intended user
 
----
+My starting idea was to combine making milk tea with music creation. I proposed an empty cup, toppings associated with different instruments, and milk, coffee or tea as the musical foundation. For example, pearls would produce piano sounds and red beans would produce drum beats.
 
-## 2. Iteration & Design Decisions
+The intended user is someone looking for a short, playful creative experience without needing to understand music software. The central question is: **can a person build and revise a musical combination by choosing ingredients?**
 
-### Phase 1: Real-Time Audio Engine
-Instead of loading static MP3 assets, I implemented an oscillator node pipeline (`OscillatorNode` -> `GainNode` -> `AudioContext.destination`). This allowed real-time synthesis of six distinct sound modes (Sine, 8-Bit Square, Analog Saw, Soft Triangle, Sub Bass, Music Box).
+I wanted two stages: adding an ingredient should play a short preview, while completing the drink should reveal the full combination. This gives the finish action a purpose and lets users explore individual sounds first.
 
-### Phase 2: Audio-Visual Synchronization
-To make the feedback tactile:
-- The vinyl disk CSS rotation speed was programmatically bound to the Tempo slider (`animationDuration = (3 / currentSpeed) + 's'`).
-- A red needle tracking indicator (`now-playing-dot`) and status readouts were added to explicitly communicate machine state.
+## 2. Developing the interaction
 
----
+The recipe state consists of one selected base and a count for each topping. A click changes this state, and feedback connects sound with the drink: a preview plays, pieces appear in the cup, and the receipt updates.
 
-## 3. User Trial & Improvements
+The finish button becomes available only when there is both a base and a topping. It starts an eight-bar composition using the selected musical parts. Removing ingredients, stopping playback and resetting make experimentation reversible.
 
-### The Trial
-I asked a peer to try the project without any prior explanation. I observed where they hesitated and how they engaged with the interface:
+The cute café direction uses cream and pink colours, rounded buttons, a receipt-style recipe and a rotating cup. These support the ingredient metaphor and make the process of selecting, adding and finishing visible.
 
-1. **Observation 1 (Hesitation on Startup)**:
-   The user initially tried to move the sliders before clicking `Power On`. Because the audio context wasn't running, moving the sliders caused confusion as nothing occurred.
-2. **Observation 2 (Acoustic Comfort)**:
-   When switching to 8-bit square wave at high pitch, raw unshaped square waves produced unpleasant clicking noises when notes started and stopped.
+## 3. Changes during development
 
-### Decisions & Improvements Made
-1. **State-Locked UI**:
-   I styled the control panel with lowered opacity (`opacity: 0.4`) and disabled interaction (`pointer-events: none`) while paused. Now, users immediately recognise that `Power On` is the required first step.
-2. **ADSR Volume Envelopes**:
-   I refined the `playTone` gain curve using exponential ramps (`exponentialRampToValueAtTime`), adding a 20ms attack and tailored decay curves for each instrument (e.g., short pluck for Music Box, sustained tail for Sub Bass), eliminating audio clicks.
+### Fixing cup rotation
 
----
+After seeing the first version, I reported that the cup looked strange when rotating. The generated renderer rotated points used for the side outline in a way that made a circular cup appear narrower. The label also moved without correctly turning with the cup surface.
 
-## 4. AI Tool Usage Declaration
+The renderer was revised so the circular silhouette remains stable during horizontal rotation. Ingredients rotate in three-dimensional coordinates, and the label changes its projected angle and disappears when facing away. Drag smoothing and double-click to return to the front were added.
 
-AI (Gemini) was utilized as an interactive sounding board and technical consultant during this project:
+The purpose was to make the feedback consistent: dragging should communicate rotation rather than an unexplained change in the cup's shape.
 
-- **Suggestion Kept**:
-  The AI suggested applying mathematical envelopes (`exponentialRampToValueAtTime`) on the Web Audio `GainNode` to simulate acoustic instrument decay (especially the Music Box and Sub Bass dynamics) instead of abrupt note cut-offs.
-- **Suggestion Changed / Rejected**:
-  The AI initially suggested using Python and Streamlit to synthesize and stream `.wav` files. I rejected this approach after discovering that browser-based server roundtrips caused perceptible lag. Shifting completely to client-side Web Audio API delivered an instantaneous feedback loop.
+### Increasing variety rather than quantity
+
+The first version had four toppings and a maximum of three spoonfuls per type. When I requested more toppings, the AI initially interpreted this as more quantity and raised the limit to eight per type.
+
+I clarified that I wanted **more topping types**, and asked for **six spoonfuls per type**. The current version has eight types, adding taro balls, strawberry pieces, grass jelly and sago. These introduce bass, plucked-string-style notes, flute-style melody and shaker rhythm.
+
+The total remains limited to 24 spoonfuls. This offers more sound combinations while keeping the drink bounded. When many different parts are active, the code reduces their individual levels to moderate the mix.
+
+These changes followed feedback from me as the project author. They do not count as the assignment's independent user trial.
+
+## 4. One piece of code connecting input to response
+
+The topping click handler in `app.js` makes the interaction concrete:
+
+1. Read the topping identifier from the clicked button's `data-top` value.
+2. Check the six-spoon per-type limit and the 24-spoon total. If either applies, display a message without changing the recipe.
+3. Increase `counts[id]` by one and invalidate the previously finished drink.
+4. Add visible pieces, arrange their positions, and update the recipe feedback.
+5. Call `preview(id)` to play a short example of the topping's sound.
+
+Later, `compose()` reads the selected ingredients and schedules their musical parts together. A topping therefore affects the final audio as well as the cup's appearance. Before presenting the project, I need to understand the click handler and the functions `update()`, `preview()`, `ingredient()` and `compose()`.
+
+## 5. Implementation checks completed with AI assistance
+
+These checks were carried out during development using Codex tools and the in-app browser. They are functional checks, not an independent usability study.
+
+| Check | Observed result |
+| --- | --- |
+| JavaScript syntax check with `node --check app.js` | Passed after implementation changes |
+| Select a base and add toppings | Receipt and drink count updated; finishing became available |
+| Finish a valid recipe | Player entered playback state and enabled export |
+| Export a composition in an earlier version | A WAV download was produced and its RIFF/WAVE header was inspected |
+| Test the earlier 24-spoon total limit | A further addition was rejected with a full-cup message |
+| Attempt seven spoonfuls of taro in the current version | Count stayed at six and a limit message appeared |
+| Add all four new types and finish | Player entered playback without captured browser errors |
+| Drag a filled cup after the rotation fix | Cup outline stayed stable while ingredients and label changed orientation |
+
+The export check predates the new instruments. Final recipe export, a fresh run following the README and the final repository link still need checking before submission. These results do not establish compatibility with every browser or device.
+
+## 6. Independent user trial — TO COMPLETE
+
+**Status: no independent participant trial has been supplied for this document. Complete this section after a real trial. Author feedback above does not replace it.**
+
+Ask at least one other person to try the site before explaining the controls. A neutral prompt could be: “Make a drink that sounds the way you want, listen to it, then change one thing.” Observe before helping. Do not include their name or a recording of them in the public repository.
+
+Replace these fields with actual observations:
+
+- **Date and setting:** [actual date, device and browser]
+- **Participant:** [one other person; no identifying information needed]
+- **Task prompt:** [what I actually asked them to do]
+- **First action:** [what they attempted]
+- **Hesitation or mistake:** [specific observed behaviour, or state if none was observed]
+- **Response to the feedback:** [what they did or actually said; do not invent a quotation]
+- **My decision:** [one improvement based on the observation, or a reason to retain the design]
+- **Change made:** [file/control, or no change with a reason]
+- **Follow-up check:** [what happened when the revised behaviour was checked]
+
+Useful things to observe include whether they find the finish button, distinguish a preview from the whole composition, locate the minus buttons, and understand the quantity limit. These are observation prompts, not findings.
+
+## 7. AI tools and my decisions
+
+I used **OpenAI ChatGPT/Codex** to develop the website through conversation. It generated substantial page structure, styling and JavaScript, including audio synthesis, cup rendering, state updates and WAV export. It also assisted with debugging, browser checks, packaging source files and drafting the README and this document.
+
+My contribution recorded in the conversation was the core concept, desired sound mappings, two-stage playback, visual direction, and feedback about cup rotation, topping variety and quantity limits. Additional coding or testing contributions should only be claimed here if I actually complete them.
+
+- **Suggestion kept:** the receipt-style recipe panel introduced by the AI. It remained in the revisions because it gives a visible record of the ingredients and a place to remove them.
+- **Suggestion changed:** increasing each topping to eight spoonfuls. I clarified that variety was the priority and changed the limit to six while expanding to eight types.
+- **Implementation revised:** the initial cup rotation, because its appearance did not communicate a natural rotating cup.
+
+AI assistance does not replace my responsibility to understand the code, verify that it runs, conduct the independent trial and ensure this document matches the final submission.
+
+## 8. Credits and development history
+
+The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji. See the README for the font source and AI disclosure.
+
+The iterations above are supported by the development conversation. **A visible Git commit history has not been verified here.** Conversation history is not a substitute for repository commits.
+
+When copying into an existing project, commit the current work with a truthful description, then make separate commits for subsequent real changes such as the trial-based improvement and final documentation. Do not invent earlier commits or backdate development. Retain credits for pre-existing material in the destination project.
