@@ -107,4 +107,3 @@ PROCESS.md   Decisions, AI use, checks and user-trial record
 - **Icons:** Unicode characters and emoji rendered by the visitor's system; appearance varies by platform.
 - **Visuals and sound:** the cup is drawn in code and audio is synthesized in the browser. No downloaded photos, instrument recordings, external datasets or course-example files were used in this generated version.
 
-If merging this into an existing project containing borrowed code or media, retain the original credits and add the relevant sources here.
