@@ -1,4 +1,4 @@
-Boba Melody · 啵啵音乐铺
+# Boba Melody · 啵啵音乐铺
 
 **Assignment 3: An interactive experience**
 
@@ -84,6 +84,7 @@ Place the source files at the repository root. In **Settings → Pages**, choose
 - The waveform animation indicates playback but is not a measured audio spectrum.
 - Interface text is primarily Chinese. Full keyboard and screen-reader access to canvas rotation has not been implemented.
 - Core functions were checked in the Codex in-app browser. Cross-browser and physical-device coverage is limited; universal compatibility is not claimed.
+- Mobile user feedback reports that sound plays on some phones but not others; Apple iPhones and vivo phones were mentioned. Exact affected models and browsers have not yet been documented, and a verified fix is not available. See `PROCESS.md` for the observation and follow-up plan.
 
 ## Files
 

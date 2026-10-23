@@ -1,12 +1,16 @@
-# Process — Boba Melody
+Process — Boba Melody
 
 **Assignment 3: An interactive experience**
 
-This document records decisions visible in the development conversation. Author feedback and implementation checks are separated from the required independent user trial. The trial section remains incomplete until another person has actually tried the experience.
+This document records the project's development, including the author's account of the starting idea and user feedback. Author feedback, AI-assisted implementation checks and mobile user feedback are distinguished below. Trial details that have not yet been recorded are identified explicitly.
 
 ## 1. Starting idea and intended user
 
-My starting idea was to combine making milk tea with music creation. I proposed an empty cup, toppings associated with different instruments, and milk, coffee or tea as the musical foundation. For example, pearls would produce piano sounds and red beans would produce drum beats.
+My first idea was a simple DJ-disc webpage where users could move sliders to change the speed and style of music. It offered a direct relationship between an input and a sound change, but I felt that adjusting sliders alone was too monotonous for the experience I wanted to create.
+
+I changed direction to combine making milk tea with music creation. Instead of only adjusting an existing sound, users would build a combination by choosing familiar ingredients. I proposed an empty cup, toppings associated with different instruments, and milk, coffee or tea as the musical foundation. For example, pearls would produce piano sounds and red beans would produce drum beats.
+
+This retained the original interest in controlling music, including a tempo slider, while giving users a more playful reason to experiment. Making a drink also suggested a clear progression: select, add, revise, and finish.
 
 The intended user is someone looking for a short, playful creative experience without needing to understand music software. The central question is: **can a person build and revise a musical combination by choosing ingredients?**
 
@@ -69,25 +73,30 @@ These checks were carried out during development using Codex tools and the in-ap
 
 The export check predates the new instruments. Final recipe export, a fresh run following the README and the final repository link still need checking before submission. These results do not establish compatibility with every browser or device.
 
-## 6. Independent user trial — TO COMPLETE
+## 6. User feedback: inconsistent sound on mobile phones
 
-**Status: no independent participant trial has been supplied for this document. Complete this section after a real trial. Author feedback above does not replace it.**
+Feedback from people trying the experience on mobile phones revealed that sound worked on some phones but not on others. Apple iPhones and vivo phones were among the devices mentioned. The exact models, browsers and operating-system versions, and which device succeeded or failed, have not yet been recorded, so I cannot attribute the problem to either brand as a whole.
 
-Ask at least one other person to try the site before explaining the controls. A neutral prompt could be: “Make a drink that sounds the way you want, listen to it, then change one thing.” Observe before helping. Do not include their name or a recording of them in the public repository.
+This exposed a problem with the main interaction: users need to hear the short preview and completed composition to understand how an ingredient changes the music. If the sound is missing, visual changes alone do not communicate the full result of their choices.
 
-Replace these fields with actual observations:
+### My response and current status
 
-- **Date and setting:** [actual date, device and browser]
-- **Participant:** [one other person; no identifying information needed]
-- **Task prompt:** [what I actually asked them to do]
-- **First action:** [what they attempted]
-- **Hesitation or mistake:** [specific observed behaviour, or state if none was observed]
-- **Response to the feedback:** [what they did or actually said; do not invent a quotation]
-- **My decision:** [one improvement based on the observation, or a reason to retain the design]
-- **Change made:** [file/control, or no change with a reason]
-- **Follow-up check:** [what happened when the revised behaviour was checked]
+I am keeping the ingredient-to-instrument concept because it is central to the project. The feedback identifies mobile audio reliability as a priority for the next iteration. The README has been updated to disclose the reported limitation, rather than implying that audio works on all phones.
 
-Useful things to observe include whether they find the finish button, distinguish a preview from the whole composition, locate the minus buttons, and understand the quantity limit. These are observation prompts, not findings.
+**No mobile-audio code fix or successful device retest is being claimed here.** The existing sound toggle, user-triggered audio setup and retry messages were already present before this feedback; they should not be described as new changes made because of the trial.
+
+The next step is to reproduce the issue on an affected phone and record whether the topping preview, the final composition, or both are silent. Possible follow-up changes include a clearer sound-start action and more useful playback-status feedback, but these remain proposals until implemented and tested. The available feedback does not yet establish a technical cause.
+
+### Details to complete before submission
+
+- **Trial date and task:** [record the actual date and what the person was asked to do]
+- **Trial setup:** [record whether the person tried it before the controls were explained, as required by the assignment]
+- **Working device:** [model, operating system, browser and whether the site opened in a normal browser or an in-app browser]
+- **Affected device:** [the same details, without any personal identifiers]
+- **Observed action and result:** [what the person tapped, which visual response appeared, and whether preview or full playback was silent]
+- **Follow-up decision and result:** [record an actual change and retest, or explain why the design was retained after investigation]
+
+The reported feedback is recorded here honestly, but it does not yet provide a complete observation-and-iteration record. These remaining details should be completed from a real trial rather than inferred.
 
 ## 7. AI tools and my decisions
 
