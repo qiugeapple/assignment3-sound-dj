@@ -1,4 +1,4 @@
-Process — Boba Melody
+# Process — Boba Melody
 
 **Assignment 3: An interactive experience**
 
@@ -46,6 +46,12 @@ These changes followed feedback from me as the project author. They do not count
 
 ## 4. One piece of code connecting input to response
 
+### Later addition: English and Chinese switching
+
+I requested an English version and then clarified that I wanted a language switch so both English and Chinese remained available. With Codex assistance, a header button and a translation layer in `i18n.js` were added. It translates static text and changing recipe/audio messages without recreating controls or resetting the drink. First visits default to English; the browser remembers the chosen language where local storage is available. English layout adjustments were added for longer ingredient names.
+
+Browser checks confirmed that ingredient counts stayed the same when switching both ways, playing-status and compatible-audio messages changed language, and the language selection survived a reload. The English interface was also checked for remaining Chinese visible text, apart from the button labelled “中文”. These are implementation checks rather than a new independent participant trial.
+
 The topping click handler in `app.js` makes the interaction concrete:
 
 1. Read the topping identifier from the clicked button's `data-top` value.
@@ -75,17 +81,19 @@ The export check predates the new instruments. Final recipe export, a fresh run 
 
 ## 6. User feedback: inconsistent sound on mobile phones
 
-Feedback from people trying the experience on mobile phones revealed that sound worked on some phones but not on others. Apple iPhones and vivo phones were among the devices mentioned. The exact models, browsers and operating-system versions, and which device succeeded or failed, have not yet been recorded, so I cannot attribute the problem to either brand as a whole.
+Feedback from people trying the experience on mobile phones revealed that sound worked on some phones but not on others. I later clarified that my iPhone 17 and a classmate's vivo phone both had no sound. The exact vivo model, browsers and operating-system versions have not yet been recorded, so I cannot attribute the problem to either brand as a whole.
 
 This exposed a problem with the main interaction: users need to hear the short preview and completed composition to understand how an ingredient changes the music. If the sound is missing, visual changes alone do not communicate the full result of their choices.
 
 ### My response and current status
 
-I am keeping the ingredient-to-instrument concept because it is central to the project. The feedback identifies mobile audio reliability as a priority for the next iteration. The README has been updated to disclose the reported limitation, rather than implying that audio works on all phones.
+I kept the ingredient-to-instrument concept and asked for help investigating the missing sound. The original code attempted to resume only a suspended audio context, did not handle other interrupted states, and labelled sound as enabled without verifying startup. These are confirmed code limitations, but they do not establish the exact cause on the two phones.
 
-**No mobile-audio code fix or successful device retest is being claimed here.** The existing sound toggle, user-triggered audio setup and retry messages were already present before this feedback; they should not be described as new changes made because of the trial.
+With Codex assistance, the implementation was changed to request startup directly during a click, check the running state, time out an unresolved startup attempt, and allow an explicit retry to replace a stuck context. An optional playback audio-session setting is used only where the browser supports it. A new **开启声音 / 测试音** control sends three test notes; its wording does not claim that the phone speaker is definitely audible.
 
-The next step is to reproduce the issue on an affected phone and record whether the topping preview, the final composition, or both are silent. Possible follow-up changes include a clearer sound-start action and more useful playback-status feedback, but these remain proposals until implemented and tested. The available feedback does not yet establish a technical cause.
+A second output path was added: after finishing a recipe, the user can generate compatible audio, then deliberately tap again to play its WAV file through a normal browser audio element. This preserves the rule that the complete composition is available only after finishing. Editing the recipe stops and invalidates that audio. These changes are in `app.js`, with the new sound-help layout in `style.css`.
+
+Desktop browser checks confirmed the startup interaction, generation and playback of compatible audio, and stopping/invalidation after editing. **The changes have not yet been verified on my iPhone 17 or the classmate's vivo phone.** The next step is to upload the revised source and retest both phones, recording separately whether previews, live composition and compatible playback can be heard. The README now discloses this remaining limitation.
 
 ### Details to complete before submission
 
@@ -115,3 +123,6 @@ AI assistance does not replace my responsibility to understand the code, verify 
 The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji. See the README for the font source and AI disclosure.
 
 The iterations above are supported by the development conversation. **A visible Git commit history has not been verified here.** Conversation history is not a substitute for repository commits.
+
+When copying into an existing project, commit the current work with a truthful description, then make separate commits for subsequent real changes such as the trial-based improvement and final documentation. Do not invent earlier commits or backdate development. Retain credits for pre-existing material in the destination project.
+

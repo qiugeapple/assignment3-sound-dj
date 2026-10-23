@@ -18,6 +18,8 @@ A short screen recording with computer audio can also demonstrate the preview-to
 
 ## How to play
 
+Use the **中文 / English** button in the header to switch languages. The first visit defaults to English; the selected language is remembered on the same browser when local storage is available. Switching languages preserves the current recipe, tempo and playback state. Ingredient names, recipe details, status messages, audio-help controls and accessibility labels are translated.
+
 1. Choose **牛奶 (milk)**, **红茶 (black tea)**, or **咖啡 (coffee)** as the musical base. Each provides a different chord foundation and sound character.
 2. Click a topping to add one spoonful and hear a short instrument-style preview. The cup and recipe receipt update immediately.
 3. Compare combinations. Use the minus buttons on the receipt to remove ingredients, or adjust the tempo between **70 and 120 BPM**.
@@ -57,8 +59,9 @@ This is a static **HTML, CSS and JavaScript** project. It requires no package in
 1. Download or clone the repository and open its folder in VS Code.
 2. Install **Live Server** by **Ritwick Dey**, if needed.
 3. Right-click `index.html` and select **Open with Live Server**.
-4. Open the local URL shown by the extension. Keep `index.html`, `style.css` and `app.js` in the same directory.
-5. Click a base or topping to start audio. Sound begins after a user gesture; check the device volume and the page's sound toggle.
+4. Open the local URL shown by the extension. Keep `index.html`, `style.css`, `app.js` and `i18n.js` in the same directory.
+5. Click **开启声音 / 测试音** to request audio and send three short test notes, then choose a base or topping. Check media volume and the page's sound toggle. An engine-started message does not prove that the phone speaker is audible.
+6. If live sound is still silent, finish a valid recipe and click **听不到？生成兼容音频**. Once preparation finishes, click **播放兼容音频**. This second deliberate tap plays a locally generated WAV through a normal browser audio element. Editing the recipe discards the old audio.
 
 Alternatively, open `index.html` directly in a current desktop browser. A local server is recommended for development.
 
@@ -82,9 +85,11 @@ Place the source files at the repository root. In **Settings → Pages**, choose
 - Compositions last approximately 16–27 seconds depending on tempo. Recipes select and mix musical parts rather than generating a new song structure each time.
 - Refreshing clears the recipe; there is no persistent storage.
 - The waveform animation indicates playback but is not a measured audio spectrum.
-- Interface text is primarily Chinese. Full keyboard and screen-reader access to canvas rotation has not been implemented.
+- The interface supports English and Chinese. Full keyboard and screen-reader access to canvas rotation has not been implemented.
 - Core functions were checked in the Codex in-app browser. Cross-browser and physical-device coverage is limited; universal compatibility is not claimed.
-- Mobile user feedback reports that sound plays on some phones but not others; Apple iPhones and vivo phones were mentioned. Exact affected models and browsers have not yet been documented, and a verified fix is not available. See `PROCESS.md` for the observation and follow-up plan.
+- The author reports no sound on an iPhone 17 and a classmate's vivo phone (exact vivo model and both browser versions are not recorded). Audio startup recovery, a test-tone control and a WAV-based compatible playback option have since been added. Desktop checks pass, but a successful retest on those two phones is still required; full mobile compatibility is not claimed.
+
+For optional developer regression checks, with Node.js installed run `node --test --test-isolation=none audio-startup.test.cjs`. Node.js is not needed to use the website.
 
 ## Files
 
@@ -92,6 +97,7 @@ Place the source files at the repository root. In **Settings → Pages**, choose
 index.html   Page structure and controls
 style.css    Layout, responsive styles and animations
 app.js       Recipe state, audio synthesis, cup rendering and WAV export
+i18n.js      English/Chinese text, dynamic-message translation and language preference
 README.md    Overview and running instructions
 PROCESS.md   Decisions, AI use, checks and user-trial record
 ```
