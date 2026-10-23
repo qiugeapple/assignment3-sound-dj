@@ -2,406 +2,332 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>S/M - Cyber Turntable</title>
+    <title>Boba Beat Maker - Interactive Audio</title>
     <style>
-        * {
-            box-sizing: border-box;
-        }
         body {
-            background-color: #e6e3e0;
-            color: #111;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #f7f3ee;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
             min-height: 100vh;
             margin: 0;
-            overflow: hidden;
+            color: #333;
         }
-        .header {
-            position: absolute;
-            top: 30px;
-            width: 85%;
-            max-width: 1000px;
+        .container {
             display: flex;
-            justify-content: space-between;
-            font-size: 0.75rem;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            color: #777;
-        }
-        .main-wrapper {
-            display: grid;
-            grid-template-columns: 320px 380px;
             gap: 60px;
             align-items: center;
-            padding: 50px 60px;
-            background: #ffffff;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.04);
-            border-radius: 8px;
-            max-width: 900px;
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
         }
-        .vinyl-section {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
+        /* 奶茶杯 UI */
+        .cup-wrapper {
             position: relative;
+            width: 160px;
+            height: 240px;
         }
-        .vinyl-container {
-            position: relative;
-            width: 280px;
-            height: 280px;
-        }
-        .turntable {
+        .cup {
             width: 100%;
             height: 100%;
-            border-radius: 50%;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='280' viewBox='0 0 280 280'%3E%3Ccircle cx='140' cy='140' r='138' fill='%23000' stroke='white' stroke-width='2'/%3E%3Ccircle cx='140' cy='140' r='60' fill='%23666'/%3E%3Ccircle cx='140' cy='140' r='22' fill='white'/%3E%3Cline x1='140' y1='0' x2='140' y2='280' stroke='%23dc3545' stroke-width='1.5'/%3E%3C/svg%3E");
-            background-size: cover;
+            border: 6px solid #e0dcd5;
+            border-top: none;
+            border-radius: 0 0 40px 40px;
+            position: relative;
+            overflow: hidden;
+            background: rgba(255,255,255,0.5);
         }
-        .spinning {
-            animation: spin 3s linear infinite;
-        }
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-        .vinyl-guide-line {
+        /* 液体基底 */
+        .liquid {
             position: absolute;
-            top: 0;
-            left: 50%;
-            width: 1px;
-            height: 100%;
-            background: rgba(220, 53, 69, 0.8);
-            pointer-events: none;
-            z-index: 5;
-        }
-        .now-playing-dot {
-            position: absolute;
-            bottom: 42px;
-            left: 50%;
-            width: 8px;
-            height: 8px;
-            background: #dc3545;
-            border-radius: 50%;
-            transform: translate(-50%, 0);
-            box-shadow: 0 0 6px #dc3545;
-            display: none;
-            z-index: 6;
-        }
-        .time-display {
-            margin-top: 20px;
-            font-size: 0.75rem;
-            color: #888;
-            letter-spacing: 1px;
-        }
-        .info-section {
-            display: flex;
-            flex-direction: column;
-        }
-        .album-title {
-            font-size: 3rem;
-            font-weight: 900;
-            line-height: 0.95;
-            letter-spacing: -1.5px;
-            margin: 0 0 8px 0;
-            color: #111;
-        }
-        .artist-name {
-            font-size: 0.85rem;
-            color: #666;
-            margin-bottom: 24px;
-            text-transform: uppercase;
-            letter-spacing: 1.5px;
-        }
-        .btn-start {
-            background-color: #111;
-            color: #fff;
-            border: none;
-            padding: 12px 24px;
-            font-size: 0.75rem;
-            font-weight: 600;
-            letter-spacing: 2px;
-            cursor: pointer;
-            transition: background 0.2s, transform 0.1s;
-            text-transform: uppercase;
-            width: fit-content;
-            margin-bottom: 20px;
-            border-radius: 2px;
-        }
-        .btn-start:hover {
-            background-color: #333;
-        }
-        .instrument-select {
+            bottom: 0;
             width: 100%;
-            padding: 10px 12px;
-            font-size: 0.75rem;
-            letter-spacing: 1px;
-            text-transform: uppercase;
-            color: #333;
-            background: #fafafa;
-            border: 1px solid #eee;
-            border-radius: 2px;
-            margin-bottom: 20px;
-            outline: none;
-            cursor: pointer;
+            height: 0%; /* 初始高度为0 */
+            transition: height 0.5s ease, background-color 0.5s ease;
         }
-        .controls-wrapper {
-            border-top: 1px solid #eee;
-            padding-top: 20px;
+        .liquid.tea { background-color: #d6985a; height: 80%; }
+        .liquid.milk { background-color: #fdf6e3; height: 80%; }
+        
+        /* 小料容器 */
+        .toppings-container {
+            position: absolute;
+            bottom: 10px;
+            width: 100%;
+            height: 80px;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-content: flex-end;
+            padding: 0 10px;
+            box-sizing: border-box;
+            gap: 5px;
+        }
+        .boba-item {
+            width: 16px; height: 16px; border-radius: 50%; background: #222;
+        }
+        .redbean-item {
+            width: 14px; height: 10px; border-radius: 40%; background: #8a3324;
+        }
+        .coconut-item {
+            width: 12px; height: 12px; background: #fffdf5; border: 1px solid #ddd;
+        }
+
+        /* 控制面板 */
+        .controls {
             display: flex;
             flex-direction: column;
             gap: 20px;
+            width: 250px;
         }
-        .control-group {
+        h1 { margin: 0; font-size: 1.8rem; letter-spacing: -1px; }
+        p { margin: 0; font-size: 0.85rem; color: #777; }
+        
+        .btn-group {
             display: flex;
             flex-direction: column;
             gap: 8px;
         }
-        label {
+        button {
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            background: #f0ece6;
+            color: #333;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: left;
             display: flex;
             justify-content: space-between;
-            font-size: 0.7rem;
-            color: #777;
-            text-transform: uppercase;
-            letter-spacing: 1px;
         }
-        input[type="range"] {
-            -webkit-appearance: none;
-            width: 100%;
-            height: 3px;
-            background: #e0e0e0;
-            outline: none;
-            border-radius: 2px;
+        button:hover { background: #e2ddd6; transform: translateY(-2px); }
+        button.active { background: #d9534f; color: white; }
+        
+        #startBtn {
+            background: #111; color: white; text-align: center; justify-content: center; margin-bottom: 10px;
         }
-        #speedSlider { accent-color: #007bff; }
-        #pitchSlider { accent-color: #dc3545; }
-        .status {
-            font-size: 0.7rem;
-            color: #dc3545;
-            margin-top: 15px;
-            font-weight: 600;
-            letter-spacing: 1px;
-            text-transform: uppercase;
+        #startBtn:hover { background: #333; }
+        .status-dot {
+            width: 10px; height: 10px; border-radius: 50%; background: #ccc; display: inline-block; margin-left: 10px;
         }
-        .footer {
-            position: absolute;
-            bottom: 30px;
-            text-align: center;
-            font-size: 0.7rem;
-            color: #888;
-            letter-spacing: 3px;
-            text-transform: uppercase;
+        .playing .status-dot { background: #4caf50; box-shadow: 0 0 8px #4caf50; animation: pulse 1s infinite; }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.4; }
+            100% { opacity: 1; }
         }
     </style>
 </head>
 <body>
-    <div class="header">
-        <span>S/M</span>
-        <span>ARTISTS &nbsp;/&nbsp; MIXTAPES &nbsp;/&nbsp; AWARDS</span>
-    </div>
 
-    <div class="main-wrapper">
-        <div class="vinyl-section">
-            <div class="vinyl-container">
-                <div class="turntable" id="vinyl"></div>
-                <div class="vinyl-guide-line"></div>
-                <div class="now-playing-dot" id="playDot"></div>
-            </div>
-            <div class="time-display">
-                <span id="currentTimeDisplay">0:00</span> / <span id="totalTimeDisplay">4:08</span>
+    <div class="container">
+        <!-- 视觉区：奶茶杯 -->
+        <div class="cup-wrapper">
+            <div class="cup">
+                <div class="liquid" id="liquidView"></div>
+                <div class="toppings-container" id="toppingsView"></div>
             </div>
         </div>
 
-        <div class="info-section">
-            <h1 class="album-title">CYBER<br>TURNTABLE</h1>
-            <p class="artist-name">Interactive Audio Lab</p>
-
-            <button class="btn-start" id="startBtn">💿 Power On</button>
-
-            <select class="instrument-select" id="instrumentSelect">
-                <option value="sine">Pure Sine 纯音</option>
-                <option value="square">8-Bit Square 方波</option>
-                <option value="sawtooth">Analog Saw 锯齿波</option>
-                <option value="triangle">Soft Triangle 三角波</option>
-                <option value="subbass">Sub Bass 低音贝斯</option>
-                <option value="musicbox">Music Box 八音盒</option>
-            </select>
-
-            <div class="controls-wrapper" id="controlsArea" style="opacity: 0.4; pointer-events: none; transition: opacity 0.3s;">
-                <div class="control-group">
-                    <label for="speedSlider">
-                        <span>Tempo</span>
-                        <span id="speedVal">1.0x</span>
-                    </label>
-                    <input type="range" id="speedSlider" min="0.5" max="2.0" step="0.1" value="1.0">
-                </div>
-                <div class="control-group">
-                    <label for="pitchSlider">
-                        <span>Pitch Shift</span>
-                        <span><span id="pitchVal">440</span> Hz</span>
-                    </label>
-                    <input type="range" id="pitchSlider" min="220" max="880" step="10" value="440">
-                </div>
+        <!-- 交互区：控制面板 -->
+        <div class="controls">
+            <div>
+                <h1>Boba Beat Maker</h1>
+                <p>Add ingredients to mix your audio track.</p>
             </div>
 
-            <div class="status" id="statusText">SYSTEM READY</div>
-        </div>
-    </div>
+            <button id="startBtn">1. Power On Audio Engine <span class="status-dot"></span></button>
 
-    <div class="footer">
-        BEST SOUNDS &bull; 2026
+            <div class="btn-group" style="pointer-events: none; opacity: 0.5;" id="ingredientsPanel">
+                <p>Select Base (Chords):</p>
+                <button class="base-btn" data-base="tea">🍵 Black Tea (Classic Pad)</button>
+                <button class="base-btn" data-base="milk">🥛 Milk (Soft Synth)</button>
+                
+                <p style="margin-top:10px;">Add Toppings (Rhythm):</p>
+                <button class="topping-btn" data-topping="boba">⚫ Boba (Melody Pluck)</button>
+                <button class="topping-btn" data-topping="redbean">🔴 Red Bean (Kick Drum)</button>
+                <button class="topping-btn" data-topping="coconut">⬜ Coconut Jelly (Hi-hat)</button>
+                <button id="resetBtn" style="margin-top: 15px; text-align:center; justify-content:center; background:#ddd;">🗑️ Empty Cup</button>
+            </div>
+        </div>
     </div>
 
     <script>
+        // 状态管理
         let audioCtx = null;
         let isPlaying = false;
-        let timer = null;
+        let currentStep = 0;
+        let nextNoteTime = 0;
+        let timerID = null;
 
+        // 用户当前的饮品配方
+        let recipe = {
+            base: null, // 'tea' 或 'milk'
+            toppings: new Set() // 存放 'boba', 'redbean', 'coconut'
+        };
+
+        // DOM 元素
         const startBtn = document.getElementById('startBtn');
-        const vinyl = document.getElementById('vinyl');
-        const playDot = document.getElementById('playDot');
-        const instrumentSelect = document.getElementById('instrumentSelect');
-        const speedSlider = document.getElementById('speedSlider');
-        const pitchSlider = document.getElementById('pitchSlider');
-        const speedVal = document.getElementById('speedVal');
-        const pitchVal = document.getElementById('pitchVal');
-        const statusText = document.getElementById('statusText');
-        const controlsArea = document.getElementById('controlsArea');
-        const currentTimeDisplay = document.getElementById('currentTimeDisplay');
+        const ingredientsPanel = document.getElementById('ingredientsPanel');
+        const liquidView = document.getElementById('liquidView');
+        const toppingsView = document.getElementById('toppingsView');
 
-        const melody = [261.63, 293.66, 329.63, 392.00, 440.00, 392.00, 329.63, 293.66];
+        // 音符频率数据 (C大调五声音阶)
+        const notes = {
+            C4: 261.63, E4: 329.63, G4: 392.00, A4: 440.00, C5: 523.25
+        };
+        // 珍珠旋律 pattern (8步)
+        const bobaMelody = [notes.C5, null, notes.G4, notes.A4, null, notes.E4, notes.C5, null];
 
-        let noteIndex = 0;
-        let currentSpeed = 1.0;
-        let currentPitch = 440;
-        let startTime = 0;
-
-        function playTone(freq, instrument) {
+        // 核心发声函数
+        function playSound(type, time) {
             if (!audioCtx) return;
-
             const osc = audioCtx.createOscillator();
             const gain = audioCtx.createGain();
-
-            switch (instrument) {
-                case 'square':
-                    osc.type = 'square';
-                    break;
-                case 'sawtooth':
-                    osc.type = 'sawtooth';
-                    break;
-                case 'triangle':
-                    osc.type = 'triangle';
-                    break;
-                case 'subbass':
-                    osc.type = 'sine';
-                    freq = freq * 0.5;
-                    break;
-                case 'musicbox':
-                    osc.type = 'triangle';
-                    break;
-                default:
-                    osc.type = 'sine';
-            }
-
-            osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-
-            const now = audioCtx.currentTime;
-            gain.gain.setValueAtTime(0.0001, now);
-            gain.gain.exponentialRampToValueAtTime(0.25, now + 0.02);
-
-            if (instrument === 'musicbox') {
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.5);
-            } else if (instrument === 'subbass') {
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.8);
-            } else {
-                gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
-            }
-
             osc.connect(gain);
             gain.connect(audioCtx.destination);
-            osc.start(now);
-            osc.stop(now + 0.9);
-        }
 
-        function updateTimeDisplay() {
-            if (!isPlaying) return;
-            const elapsed = Math.floor((Date.now() - startTime) / 1000);
-            const minutes = Math.floor(elapsed / 60);
-            const seconds = elapsed % 60;
-            currentTimeDisplay.innerText = `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
-        }
-
-        function startMusicLoop() {
-            if (timer) clearInterval(timer);
-
-            let interval = 500 / currentSpeed;
-            timer = setInterval(() => {
-                if (!isPlaying) {
-                    clearInterval(timer);
-                    return;
+            if (type === 'tea' || type === 'milk') {
+                // 基底：在每个小节开头（step 0）播放长和弦音
+                if (currentStep === 0) {
+                    osc.type = type === 'tea' ? 'sine' : 'triangle';
+                    osc.frequency.value = type === 'tea' ? notes.C4 : notes.E4;
+                    gain.gain.setValueAtTime(0, time);
+                    gain.gain.linearRampToValueAtTime(0.15, time + 0.5);
+                    gain.gain.exponentialRampToValueAtTime(0.01, time + 2.0);
+                    osc.start(time);
+                    osc.stop(time + 2.0);
                 }
-
-                let baseFreq = melody[noteIndex];
-                let adjustedFreq = baseFreq * (currentPitch / 440);
-
-                playTone(adjustedFreq, instrumentSelect.value);
-                updateTimeDisplay();
-
-                noteIndex = (noteIndex + 1) % melody.length;
-            }, interval);
+            } 
+            else if (type === 'boba') {
+                // 珍珠：轻快的旋律音
+                let freq = bobaMelody[currentStep];
+                if (freq) {
+                    osc.type = 'square';
+                    osc.frequency.value = freq;
+                    gain.gain.setValueAtTime(0.1, time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.1);
+                    osc.start(time);
+                    osc.stop(time + 0.1);
+                }
+            }
+            else if (type === 'redbean') {
+                // 红豆：底鼓 (Kick Drum) - 在 0, 4 拍出现
+                if (currentStep === 0 || currentStep === 4) {
+                    osc.type = 'sine';
+                    osc.frequency.setValueAtTime(150, time);
+                    osc.frequency.exponentialRampToValueAtTime(0.01, time + 0.1); // 音高快速下降产生打击感
+                    gain.gain.setValueAtTime(0.4, time);
+                    gain.gain.exponentialRampToValueAtTime(0.01, time + 0.1);
+                    osc.start(time);
+                    osc.stop(time + 0.1);
+                }
+            }
+            else if (type === 'coconut') {
+                // 椰果：连续的短促高频打击乐 (Hi-hat) - 在 2, 4, 6 拍出现
+                if (currentStep % 2 !== 0) {
+                    osc.type = 'square';
+                    osc.frequency.value = 800;
+                    gain.gain.setValueAtTime(0.05, time);
+                    gain.gain.exponentialRampToValueAtTime(0.001, time + 0.05);
+                    osc.start(time);
+                    osc.stop(time + 0.05);
+                }
+            }
         }
 
-        startBtn.addEventListener('click', () => {
-            if (!audioCtx) {
-                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        // 调度器 (Web Audio API 精确计时)
+        function scheduler() {
+            while (nextNoteTime < audioCtx.currentTime + 0.1) {
+                // 调度当前步的声音
+                if (recipe.base) playSound(recipe.base, nextNoteTime);
+                recipe.toppings.forEach(topping => playSound(topping, nextNoteTime));
+                
+                // 推进到下一步
+                nextNoteTime += 0.25; // 速度 (Tempo): 0.25秒一拍
+                currentStep = (currentStep + 1) % 8; // 8拍一个循环
             }
+            timerID = setTimeout(scheduler, 25.0);
+        }
 
-            if (audioCtx.state === 'suspended') {
-                audioCtx.resume();
-            }
+        // 启动引擎
+        startBtn.addEventListener('click', () => {
+            if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            
+            if (audioCtx.state === 'suspended') audioCtx.resume();
 
             if (!isPlaying) {
                 isPlaying = true;
-                startTime = Date.now();
-                vinyl.classList.add('spinning');
-                playDot.style.display = 'block';
-                startBtn.innerText = "💿 Power Off";
-                statusText.innerText = "PLAYING ACTIVE";
-                controlsArea.style.opacity = "1";
-                controlsArea.style.pointerEvents = "auto";
-                startMusicLoop();
-            } else {
-                isPlaying = false;
-                vinyl.classList.remove('spinning');
-                playDot.style.display = 'none';
-                startBtn.innerText = "💿 Power On";
-                statusText.innerText = "SYSTEM PAUSED";
-                controlsArea.style.opacity = "0.4";
-                controlsArea.style.pointerEvents = "none";
-                clearInterval(timer);
-                currentTimeDisplay.innerText = "0:00";
+                startBtn.classList.add('playing');
+                startBtn.innerHTML = `Audio Engine Running <span class="status-dot"></span>`;
+                ingredientsPanel.style.opacity = "1";
+                ingredientsPanel.style.pointerEvents = "auto";
+                
+                nextNoteTime = audioCtx.currentTime + 0.1;
+                currentStep = 0;
+                scheduler();
             }
         });
 
-        speedSlider.addEventListener('input', (e) => {
-            currentSpeed = parseFloat(e.target.value);
-            speedVal.innerText = `${currentSpeed.toFixed(1)}x`;
-            vinyl.style.animationDuration = (3 / currentSpeed) + 's';
+        // 交互：选择基底
+        document.querySelectorAll('.base-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                document.querySelectorAll('.base-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                recipe.base = btn.dataset.base;
+                
+                // 视觉反馈
+                liquidView.className = `liquid ${recipe.base}`;
+            });
+        });
 
-            if (isPlaying) {
-                clearInterval(timer);
-                startMusicLoop();
+        // 交互：添加小料
+        document.querySelectorAll('.topping-btn').forEach(btn => {
+            btn.addEventListener('click', (e) => {
+                const topping = btn.dataset.topping;
+                
+                // 切换逻辑 (Toggle)
+                if (recipe.toppings.has(topping)) {
+                    recipe.toppings.delete(topping);
+                    btn.classList.remove('active');
+                    removeToppingVisuals(topping);
+                } else {
+                    recipe.toppings.add(topping);
+                    btn.classList.add('active');
+                    addToppingVisuals(topping);
+                }
+            });
+        });
+
+        // 交互：清空杯子
+        document.getElementById('resetBtn').addEventListener('click', () => {
+            recipe.base = null;
+            recipe.toppings.clear();
+            document.querySelectorAll('button').forEach(b => b.classList.remove('active'));
+            liquidView.className = 'liquid';
+            toppingsView.innerHTML = '';
+        });
+
+        // 视觉助手：生成小料UI
+        function addToppingVisuals(type) {
+            // 生成5-8个小颗粒
+            let count = type === 'boba' ? 8 : (type === 'redbean' ? 12 : 6);
+            for(let i=0; i<count; i++) {
+                let item = document.createElement('div');
+                item.className = `${type}-item item-element`;
+                item.dataset.type = type;
+                toppingsView.appendChild(item);
             }
-        });
+        }
 
-        pitchSlider.addEventListener('input', (e) => {
-            currentPitch = parseInt(e.target.value);
-            pitchVal.innerText = currentPitch;
-        });
+        function removeToppingVisuals(type) {
+            const items = toppingsView.querySelectorAll(`.item-element[data-type="${type}"]`);
+            items.forEach(item => item.remove());
+        }
     </script>
 </body>
 </html>
