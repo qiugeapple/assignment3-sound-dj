@@ -97,17 +97,6 @@ Desktop browser checks confirmed the startup interaction, generation and playbac
 
 The result supports keeping the revised audio controls and compatible playback option. It also completes a documented sequence of feedback, an implementation change and a positive follow-up result. I have not yet recorded which phone/browser was used for this successful retest, whether both originally affected phones were tested again, or whether live synthesis or compatible playback was used. I therefore do not claim that every playback path works on every mobile device. The README has been updated with the successful result and these limits.
 
-### Details to complete before submission
-
-- **Trial date and task:** [record the actual date and what the person was asked to do]
-- **Trial setup:** [record whether the person tried it before the controls were explained, as required by the assignment]
-- **Successful mobile retest:** sound was reported as working normally on 27 October 2026. [Add the actual device, operating system, browser and playback mode; the report date need not be the test date.]
-- **Originally affected devices:** the author's iPhone 17 and a classmate's vivo phone. [Add the vivo model and the original operating-system/browser details if available.]
-- **Observed action and result:** [what the person tapped, which visual response appeared, and whether preview or full playback was silent]
-- **Follow-up decision and result:** retain the revised audio startup/recovery controls and compatible playback option after the successful mobile retest. [If available, add separate results for ingredient previews, the full live composition and compatible audio.]
-
-The missing-sound feedback, the audio changes and the successful mobile retest are recorded here. The remaining trial setup and device details should be completed from actual observations rather than inferred; the author's retest does not by itself establish that the independent participant trial was conducted before explaining the controls.
-
 ## 7. AI tools and my decisions
 
 I used **OpenAI ChatGPT/Codex** to develop the website through conversation. It generated substantial page structure, styling and JavaScript, including audio synthesis, cup rendering, state updates and WAV export. It also assisted with debugging, browser checks, packaging source files and drafting the README and this document.
