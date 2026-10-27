@@ -93,8 +93,20 @@ With Codex assistance, the implementation was changed to request startup directl
 
 A second output path was added: after finishing a recipe, the user can generate compatible audio, then deliberately tap again to play its WAV file through a normal browser audio element. This preserves the rule that the complete composition is available only after finishing. Editing the recipe stops and invalidates that audio. These changes are in `app.js`, with the new sound-help layout in `style.css`.
 
-Desktop browser checks confirmed the startup interaction, generation and playback of compatible audio, and stopping/invalidation after editing. **The changes have not yet been verified on my iPhone 17 or the classmate's vivo phone.** The next step is to upload the revised source and retest both phones, recording separately whether previews, live composition and compatible playback can be heard. The README now discloses this remaining limitation.
+Desktop browser checks confirmed the startup interaction, generation and playback of compatible audio, and stopping/invalidation after editing. Following the changes, I tested the website on mobile again and reported on **27 October 2026** that sound could now be heard normally. This is a successful author-reported mobile retest following the audio changes, rather than only a desktop check.
 
+The result supports keeping the revised audio controls and compatible playback option. It also completes a documented sequence of feedback, an implementation change and a positive follow-up result. I have not yet recorded which phone/browser was used for this successful retest, whether both originally affected phones were tested again, or whether live synthesis or compatible playback was used. I therefore do not claim that every playback path works on every mobile device. The README has been updated with the successful result and these limits.
+
+### Details to complete before submission
+
+- **Trial date and task:** [record the actual date and what the person was asked to do]
+- **Trial setup:** [record whether the person tried it before the controls were explained, as required by the assignment]
+- **Successful mobile retest:** sound was reported as working normally on 27 October 2026. [Add the actual device, operating system, browser and playback mode; the report date need not be the test date.]
+- **Originally affected devices:** the author's iPhone 17 and a classmate's vivo phone. [Add the vivo model and the original operating-system/browser details if available.]
+- **Observed action and result:** [what the person tapped, which visual response appeared, and whether preview or full playback was silent]
+- **Follow-up decision and result:** retain the revised audio startup/recovery controls and compatible playback option after the successful mobile retest. [If available, add separate results for ingredient previews, the full live composition and compatible audio.]
+
+The missing-sound feedback, the audio changes and the successful mobile retest are recorded here. The remaining trial setup and device details should be completed from actual observations rather than inferred; the author's retest does not by itself establish that the independent participant trial was conducted before explaining the controls.
 
 ## 7. AI tools and my decisions
 
@@ -106,12 +118,8 @@ My contribution recorded in the conversation was the core concept, desired sound
 - **Suggestion changed:** increasing each topping to eight spoonfuls. I clarified that variety was the priority and changed the limit to six while expanding to eight types.
 - **Implementation revised:** the initial cup rotation, because its appearance did not communicate a natural rotating cup.
 
-AI assistance does not replace my responsibility to understand the code, verify that it runs, conduct the independent trial and ensure this document matches the final submission.
+
 
 ## 8. Credits and development history
 
-The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji. See the README for the font source and AI disclosure.
-
-
-
-
+The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji.

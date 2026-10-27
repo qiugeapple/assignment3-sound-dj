@@ -84,7 +84,7 @@ The code uses browser-native **Canvas 2D**, **Web Audio API** and **OfflineAudio
 - The waveform animation indicates playback but is not a measured audio spectrum.
 - The interface supports English and Chinese. Full keyboard and screen-reader access to canvas rotation has not been implemented.
 - Core functions were checked in the Codex in-app browser. Cross-browser and physical-device coverage is limited; universal compatibility is not claimed.
-- The author reports no sound on an iPhone 17 and a classmate's vivo phone (exact vivo model and both browser versions are not recorded). Audio startup recovery, a test-tone control and a WAV-based compatible playback option have since been added. Desktop checks pass, but a successful retest on those two phones is still required; full mobile compatibility is not claimed.
+- Initial feedback reported no sound on the author's iPhone 17 and a classmate's vivo phone. After audio startup recovery, a test-tone control and a WAV-based compatible playback option were added, the author reported on 27 October 2026 that sound could be heard normally in a mobile retest. The exact device/browser used in that successful retest and the playback mode were not specified, so this result does not establish compatibility with all phones or confirm separate retests of both original devices.
 
 For optional developer regression checks, with Node.js installed run `node --test --test-isolation=none audio-startup.test.cjs`. Node.js is not needed to use the website.
 
