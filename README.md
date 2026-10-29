@@ -21,9 +21,9 @@ A short screen recording with computer audio can also demonstrate the preview-to
 Use the **中文 / English** button in the header to switch languages. The first visit defaults to English; the selected language is remembered on the same browser when local storage is available. Switching languages preserves the current recipe, tempo and playback state. Ingredient names, recipe details, status messages, audio-help controls and accessibility labels are translated.
 
 1. Choose **牛奶 (milk)**, **红茶 (black tea)**, or **咖啡 (coffee)** as the musical base. Each provides a different chord foundation and sound character.
-2. Click a topping to add one spoonful and hear a short instrument-style preview. The cup and recipe receipt update immediately.
-3. Compare combinations. Use the minus buttons on the receipt to remove ingredients, or adjust the tempo between **70 and 120 BPM**.
-4. Click **制作完成，听听这杯** to hear the complete eight-bar composition. Full playback becomes available only after choosing a base and at least one topping.
+2. Use **+** on a topping card to add one spoonful and hear a short instrument-style preview. Use **−** beside the quantity to remove a spoonful. The cup, card count and recipe receipt update together.
+3. Compare combinations using the card controls or the receipt's minus buttons. Minus is disabled at zero; plus is disabled at six per type or 24 spoonfuls in total. Adjust the tempo between **70 and 120 BPM**.
+4. Click **制作完成，听听这杯 / Finish & hear your mix** to hear the base and each selected topping introduced in turn, followed by the full eight-bar ensemble. The labels below the player highlight the scheduled parts as they sound. Full playback becomes available only after choosing a base and at least one topping.
 5. Stop or replay the composition, save it as a WAV file, or select **重新调一杯** to reset.
 
 | Topping | Musical role |
@@ -47,7 +47,7 @@ Drag the cup horizontally to rotate it; double-click to return to the front. Rot
 | --- | --- | --- |
 | Select a base | Change the chord foundation | Highlight the choice, preview its sound, and update the cup and receipt |
 | Add or remove a topping | Change its count and musical contribution | Show the ingredients and quantity; adding also plays a brief preview |
-| Finish the drink | Schedule the selected musical parts together | Show playback status, elapsed time and an animated player; enable replay and export |
+| Finish the drink | Introduce each selected part, then play the full ensemble | Show playback status, elapsed time, an animated player and highlighted part labels; enable replay and export |
 | Edit a finished recipe or its tempo | Stop the old composition and invalidate the finished state | Require finishing again so playback matches the revised recipe |
 
 ## Run locally
@@ -59,7 +59,7 @@ This is a static **HTML, CSS and JavaScript** project. It requires no package in
 1. Download or clone the repository and open its folder in VS Code.
 2. Install **Live Server** by **Ritwick Dey**, if needed.
 3. Right-click `index.html` and select **Open with Live Server**.
-4. Open the local URL shown by the extension. Keep `index.html`, `style.css`, `app.js` and `i18n.js` in the same directory.
+4. Open the local URL shown by the extension. Keep `index.html`, `style.css`, `music.js`, `app.js` and `i18n.js` in the same directory. `music.js` must load before `app.js`.
 5. Click **开启声音 / 测试音** to request audio and send three short test notes, then choose a base or topping. Check media volume and the page's sound toggle. An engine-started message does not prove that the phone speaker is audible.
 6. If live sound is still silent, finish a valid recipe and click **听不到？生成兼容音频**. Once preparation finishes, click **播放兼容音频**. This second deliberate tap plays a locally generated WAV through a normal browser audio element. Editing the recipe discards the old audio.
 
@@ -71,7 +71,7 @@ The code uses browser-native **Canvas 2D**, **Web Audio API** and **OfflineAudio
 ## Mistakes and interruptions
 
 - **Incomplete recipe:** finishing and full playback remain disabled until a base and at least one topping are present.
-- **Repeated clicks:** each accepted click adds one spoonful. At six of one type or 24 in total, further additions are rejected with a message. The receipt's minus buttons allow corrections.
+- **Quantity limits:** each accepted plus/minus click changes the quantity by one. Minus is disabled at zero and plus is disabled at six per type or 24 in total. The receipt's minus buttons also allow corrections. Editing stops the old music and discards any previously prepared compatible audio.
 - **Editing during playback:** changing ingredients or tempo stops the old composition. Finish the revised drink to hear it again.
 - **Audio or export failure:** the interface displays a retry message. WAV export requires `OfflineAudioContext` support.
 - **Font service unavailable:** the page falls back to a system font. Its music and interaction do not require the external font request.
@@ -79,14 +79,14 @@ The code uses browser-native **Canvas 2D**, **Web Audio API** and **OfflineAudio
 ## Known limitations
 
 - Instrument sounds are synthesized approximations, not recordings. Musical patterns are predefined; this is not an AI music generator.
-- Compositions last approximately 16–27 seconds depending on tempo. Recipes select and mix musical parts rather than generating a new song structure each time.
+- Compositions last approximately 18–43 seconds depending on tempo and the number of topping types. This includes the part-by-part introduction and eight ensemble bars; compatible audio and WAV exports add a short tail. Recipes select and mix musical parts rather than generating a new song structure each time.
 - Refreshing clears the recipe; there is no persistent storage.
 - The waveform animation indicates playback but is not a measured audio spectrum.
 - The interface supports English and Chinese. Full keyboard and screen-reader access to canvas rotation has not been implemented.
 - Core functions were checked in the Codex in-app browser. Cross-browser and physical-device coverage is limited; universal compatibility is not claimed.
 - Initial feedback reported no sound on the author's iPhone 17 and a classmate's vivo phone. After audio startup recovery, a test-tone control and a WAV-based compatible playback option were added, the author reported on 27 October 2026 that sound could be heard normally in a mobile retest. The exact device/browser used in that successful retest and the playback mode were not specified, so this result does not establish compatibility with all phones or confirm separate retests of both original devices.
 
-For optional developer regression checks, with Node.js installed run `node --test --test-isolation=none audio-startup.test.cjs`. Node.js is not needed to use the website.
+For optional developer regression checks, with Node.js installed run `node --test --test-isolation=none audio-startup.test.cjs music.test.cjs`. Checks cover audio startup and all 255 non-empty topping-type combinations, including exclusion of removed parts. They do not establish how clearly every part is heard on a physical phone. Node.js is not needed to use the website.
 
 ## Files
 
@@ -94,6 +94,8 @@ For optional developer regression checks, with Node.js installed run `node --tes
 index.html   Page structure and controls
 style.css    Layout, responsive styles and animations
 app.js       Recipe state, audio synthesis, cup rendering and WAV export
+music.js     Shared score for live playback, compatible audio and WAV export
+music.test.cjs   Checks for selected-part inclusion and base-tone scheduling
 i18n.js      English/Chinese text, dynamic-message translation and language preference
 README.md    Overview and running instructions
 PROCESS.md   Decisions, AI use, checks and user-trial record
@@ -106,4 +108,3 @@ PROCESS.md   Decisions, AI use, checks and user-trial record
 - **Font:** [Noto Sans SC via Google Fonts](https://fonts.google.com/noto/specimen/Noto+Sans+SC), with system-font fallback.
 - **Icons:** Unicode characters and emoji rendered by the visitor's system; appearance varies by platform.
 - **Visuals and sound:** the cup is drawn in code and audio is synthesized in the browser. No downloaded photos, instrument recordings, external datasets or course-example files were used in this generated version.
-

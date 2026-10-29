@@ -20,7 +20,7 @@ I wanted two stages: adding an ingredient should play a short preview, while com
 
 The recipe state consists of one selected base and a count for each topping. A click changes this state, and feedback connects sound with the drink: a preview plays, pieces appear in the cup, and the receipt updates.
 
-The finish button becomes available only when there is both a base and a topping. It starts an eight-bar composition using the selected musical parts. Removing ingredients, stopping playback and resetting make experimentation reversible.
+The finish button becomes available only when there is both a base and a topping. It introduces the base and selected musical parts in turn, then plays an eight-bar ensemble. Removing ingredients, stopping playback and resetting make experimentation reversible.
 
 The cute café direction uses cream and pink colours, rounded buttons, a receipt-style recipe and a rotating cup. These support the ingredient metaphor and make the process of selecting, adding and finishing visible.
 
@@ -44,6 +44,14 @@ The total remains limited to 24 spoonfuls. This offers more sound combinations w
 
 These changes followed feedback from me as the project author. They do not count as the assignment's independent user trial.
 
+### Clearer quantity controls and a more audible mix
+
+Further user feedback requested an easier way to remove toppings and reported that the milk and coffee parts were quiet. I also noticed that I could not clearly hear every chosen topping in the final mix. Inspection showed that the previous composer did iterate over the selected types, so I could not conclude from listening alone that parts had been omitted.
+
+With Codex assistance, I changed each topping card to show **minus / quantity / plus** controls. Card controls and receipt controls now use the same quantity-changing function. Minus is disabled at zero, and plus is disabled at six per type or 24 in total. Milk and coffee were given sustained envelopes and upper-octave components to make their musical foundation more prominent.
+
+The finished drink now introduces each selected part before the full ensemble. A shared score in `music.js` is used for live playback, compatible audio and WAV export, with revised part levels and compression to moderate the mix. Labels below the player highlight the scheduled parts. Automated checks covered all 255 non-empty topping-type combinations and confirmed each selected type appeared in both introduction and ensemble. These checks verify inclusion, while the improved perceived balance still needs another phone listening trial.
+
 ## 4. One piece of code connecting input to response
 
 ### Later addition: English and Chinese switching
@@ -52,15 +60,15 @@ I requested an English version and then clarified that I wanted a language switc
 
 Browser checks confirmed that ingredient counts stayed the same when switching both ways, playing-status and compatible-audio messages changed language, and the language selection survived a reload. The English interface was also checked for remaining Chinese visible text, apart from the button labelled “中文”. These are implementation checks rather than a new independent participant trial.
 
-The topping click handler in `app.js` makes the interaction concrete:
+The topping controls and shared `changeTopping()` function in `app.js` make the interaction concrete:
 
-1. Read the topping identifier from the clicked button's `data-top` value.
-2. Check the six-spoon per-type limit and the 24-spoon total. If either applies, display a message without changing the recipe.
-3. Increase `counts[id]` by one and invalidate the previously finished drink.
-4. Add visible pieces, arrange their positions, and update the recipe feedback.
-5. Call `preview(id)` to play a short example of the topping's sound.
+1. Read the topping identifier from the card's `data-top` value and the plus/minus direction from the button.
+2. Check the zero minimum, six-spoon per-type limit and 24-spoon total. Unavailable actions are disabled, with additional checks in the handler.
+3. Increase or decrease `counts[id]` by one and invalidate the previously finished drink and prepared audio.
+4. Add or remove visible pieces, arrange their positions, and update the card, recipe and part labels.
+5. For an addition, call `preview(id)` to play a short example of the topping's sound.
 
-Later, `compose()` reads the selected ingredients and schedules their musical parts together. A topping therefore affects the final audio as well as the cup's appearance. Before presenting the project, I need to understand the click handler and the functions `update()`, `preview()`, `ingredient()` and `compose()`.
+Later, `compose()` uses the shared score from `music.js` to schedule the selected ingredients' introduction and ensemble. A topping therefore affects the final audio as well as the cup's appearance. Before presenting the project, I need to understand the click handler and the functions `update()`, `preview()`, `ingredient()` and `compose()`.
 
 ## 5. Implementation checks completed with AI assistance
 
@@ -73,11 +81,14 @@ These checks were carried out during development using Codex tools and the in-ap
 | Finish a valid recipe | Player entered playback state and enabled export |
 | Export a composition in an earlier version | A WAV download was produced and its RIFF/WAVE header was inspected |
 | Test the earlier 24-spoon total limit | A further addition was rejected with a full-cup message |
-| Attempt seven spoonfuls of taro in the current version | Count stayed at six and a limit message appeared |
+| Attempt seven spoonfuls of taro in an earlier version | Count stayed at six and a limit message appeared; the current plus control is disabled at six |
 | Add all four new types and finish | Player entered playback without captured browser errors |
 | Drag a filled cup after the rotation fix | Cup outline stayed stable while ingredients and label changed orientation |
+| Add and remove directly on a topping card | Counts and receipt updated; minus was disabled at zero and old playback was invalidated |
+| Check all 255 non-empty topping-type combinations | Every selected type was included in introduction and ensemble; removed types were excluded |
+| Check the revised eight-type coffee mix | Compatible playback and WAV export completed; the exported file contained no full-scale clipped samples |
 
-The export check predates the new instruments. Final recipe export, a fresh run following the README and the final repository link still need checking before submission. These results do not establish compatibility with every browser or device.
+The earlier export check was followed by an export check of the revised eight-type coffee mix. A fresh run following the README, the final repository link, and a phone listening comparison of the new mix still need checking before submission. These results do not establish compatibility or perceptual audibility on every browser or device.
 
 ## 6. User feedback: inconsistent sound on mobile phones
 
@@ -112,3 +123,4 @@ My contribution recorded in the conversation was the core concept, desired sound
 ## 8. Credits and development history
 
 The ingredient-to-music concept came from my original request. The generated version does not incorporate a supplied course example, external dataset, downloaded photograph or instrument sample. Graphics are drawn in code and sounds are generated in the browser. The external font is **Noto Sans SC via Google Fonts**; icons are Unicode characters and system emoji.
+

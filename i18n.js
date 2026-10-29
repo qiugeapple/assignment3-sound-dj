@@ -2,6 +2,10 @@
 // Translate presentation text without replacing controls or changing recipe/audio state.
 (() => {
  const phrases={
+  '制作完成后，先听各个声部，再听完整合奏。':'Finish your drink to hear each part, then the full mix.',
+  '用 ＋ 添加，用 − 减少 · 8 种声音':'Use + to add, − to remove · 8 sounds',
+  '先听听：各个已选声部依次登场。':'Meet your mix: each selected part takes a turn.',
+  '完整合奏：所有已选声部都已加入。':'Full mix: all your selected parts are included.',
   '啵啵音乐铺':'Boba Melody',
   '一杯灵感，一口旋律':'A sip of inspiration, a little melody',
   '今天，想喝什么':'What does today ', '旋律':'sound like', '？':'?',
@@ -82,6 +86,7 @@
    else if((match=value.match(/^添加(.+)，试听(.+)$/)))result=`Add ${english(match[1])}; preview ${english(match[2])}`;
    else if((match=value.match(/^移除一勺(.+)$/)))result=`Remove one spoonful of ${english(match[1])}`;
    else if((match=value.match(/^(🥛|🍵|☕) (.+)基底$/u)))result=`${match[1]} ${english(match[2])} base`;
+   else if((match=value.match(/^(🥛|🍵|☕) (牛奶|红茶|咖啡)$/u)))result=`${match[1]} ${english(match[2])}`;
    else if(value==='和弦 × 1')result='Chords × 1';
    else if((match=value.match(/^(.+)与(.+)小夜曲$/)))result=`${english(match[1])} serenade · ${match[2].split('、').map(name=>shortNames[name]||english(name)).join(', ')}`;
    else if((match=value.match(/^啵啵音乐铺-(.+)小夜曲\.wav$/)))result=`Boba-Melody-${english(match[1])}-Serenade.wav`;
